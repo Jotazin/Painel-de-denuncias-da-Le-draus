@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EQP POLÍCIA</title>
+<style>
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+:root{--bg:#04070d;--panel:#0a1322;--p2:#0e1a2e;--line:#16263f;--tx:#e8f0ff;--mu:#8da2c4;--blue:#1f8bff;--cy:#22d3ff;--red:#ff4d6d;--ok:#2ee6a6;--warn:#ffb020}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{min-height:100vh;display:flex;flex-direction:column;color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1100px 560px at 85% -10%,rgba(31,139,255,.2),transparent 60%),radial-gradient(800px 480px at -10% 15%,rgba(122,92,255,.1),transparent 60%),var(--bg)}
+.rgb{position:relative;isolation:isolate;animation:glow 8s linear infinite}
+.rgb::before{content:"";position:absolute;inset:0;padding:1.5px;border-radius:inherit;pointer-events:none;background:conic-gradient(from var(--a),#1f8bff,#7a5cff,#ff2bd6,#22d3ff,#1f8bff);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite}
+@keyframes spin{to{--a:360deg}}
+@keyframes glow{0%,100%{box-shadow:0 0 24px rgba(31,139,255,.18)}33%{box-shadow:0 0 24px rgba(122,92,255,.16)}66%{box-shadow:0 0 24px rgba(34,211,255,.16)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.top{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:20px clamp(16px,4vw,40px)}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-weight:900;letter-spacing:1px;background:var(--panel);color:var(--cy);text-shadow:0 0 12px var(--blue)}
+h1{font-size:clamp(1.3rem,3vw,1.8rem);letter-spacing:2px;text-shadow:0 0 18px rgba(31,139,255,.7)}
+.brand p{color:var(--mu);font-size:.85rem}
+.pill{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:99px;background:var(--panel);border:1px solid var(--line);font-size:.85rem;color:var(--mu)}
+.pill i{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px var(--warn)}
+.pill.ok i{background:var(--ok);box-shadow:0 0 10px var(--ok)}.pill.bad i{background:var(--red);box-shadow:0 0 10px var(--red)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:0 clamp(16px,4vw,40px) 6px}
+.tabs button{flex:none;padding:10px 20px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--mu);font:inherit;font-weight:600;cursor:pointer;transition:.25s}
+.tabs button:hover{color:var(--tx);border-color:var(--blue)}
+.tabs button.on{color:#fff;background:linear-gradient(135deg,#1f6bff,#1f8bff);border-color:transparent;box-shadow:0 0 18px rgba(31,139,255,.6)}
+main{flex:1;width:100%;max-width:1100px;margin:0 auto;padding:18px clamp(16px,4vw,40px) 30px}
+.panel{display:grid;gap:18px;animation:rise .4s both}
+.card{background:var(--panel);border-radius:16px;padding:20px}
+h2{font-size:1.1rem;margin-bottom:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:12px}
+label{display:grid;gap:6px;font-size:.85rem;color:var(--mu)}
+input,select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--p2);color:var(--tx);font:inherit;outline:none;color-scheme:dark;transition:.2s}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,139,255,.25)}
+.btn{padding:11px 20px;border:0;border-radius:10px;font:inherit;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,#1f6bff,#22b4ff);box-shadow:0 0 16px rgba(31,139,255,.45);transition:.2s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.12)}.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn.ghost{background:var(--p2);border:1px solid var(--line);box-shadow:none;color:var(--tx)}
+.btn.danger{background:linear-gradient(135deg,#d6224a,#ff4d6d);box-shadow:0 0 16px rgba(255,77,109,.4)}
+.btn.sm{padding:7px 12px;font-size:.85rem}
+.err{color:var(--red);font-size:.88rem;min-height:1.3em;margin-bottom:6px}
+.filters{display:grid;gap:10px;grid-template-columns:2fr 1fr 1.4fr auto;margin-bottom:10px}
+.meta{color:var(--mu);font-size:.85rem;margin-bottom:8px}
+.scroll{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.92rem}
+th{background:var(--p2);color:var(--mu);font-size:.78rem;text-transform:uppercase;letter-spacing:.6px}
+tbody tr{transition:.2s}tbody tr:hover{background:rgba(31,139,255,.07)}
+td.empty{text-align:center;color:var(--mu);padding:28px}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.78rem;font-weight:700;color:var(--c);border:1px solid var(--c);background:rgba(255,255,255,.03);text-shadow:0 0 8px var(--c)}
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:6px clamp(16px,4vw,40px) 0;padding:12px 16px;border-radius:12px;background:rgba(255,77,109,.12);border:1px solid var(--red);color:#ffc2cd;font-size:.9rem}
+.warn{padding:14px 16px;border-radius:12px;background:rgba(255,176,32,.1);border:1px solid var(--warn);color:#ffdca0;font-size:.92rem}
+.stats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.stat{background:var(--p2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat small{color:var(--mu);display:block}.stat b{font-size:1.5rem;color:var(--cy);text-shadow:0 0 12px rgba(34,211,255,.5)}
+.rank{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 16px;margin-top:10px;border-radius:14px;background:var(--p2);border:1px solid var(--line);animation:rise .4s both}
+.pos{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-weight:900;background:var(--panel);color:var(--mu)}
+.rank:first-child .pos{color:#fff;background:linear-gradient(135deg,#1f6bff,#22d3ff);box-shadow:0 0 16px rgba(34,211,255,.6)}
+.bar{height:8px;border-radius:9px;background:var(--panel);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#1f8bff,#7a5cff,#ff2bd6,#22d3ff,#1f8bff);background-size:300% 100%;animation:slide 4s linear infinite;transition:width .6s}
+@keyframes slide{to{background-position:300% 0}}
+.num{font-size:1.5rem;font-weight:800}
+.qgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.cur{font-size:.72rem;padding:2px 9px;border-radius:99px;background:var(--blue);color:#fff;margin-left:6px;vertical-align:middle}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(2,5,10,.8);backdrop-filter:blur(4px)}
+.box{width:min(440px,100%);animation:rise .25s both}.box p{margin-bottom:10px;color:var(--mu)}
+#toasts{position:fixed;right:16px;bottom:16px;z-index:60;display:grid;gap:8px;max-width:calc(100vw - 32px)}
+.toast{padding:12px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--blue);box-shadow:0 0 18px rgba(31,139,255,.4);animation:rise .3s both}
+.toast.ok{border-color:var(--ok)}.toast.error{border-color:var(--red)}
+footer{text-align:center;padding:20px;color:var(--mu);font-weight:700;letter-spacing:3px;border-top:1px solid var(--line);text-shadow:0 0 12px rgba(31,139,255,.6)}
+@media(max-width:760px){.filters{grid-template-columns:1fr}.rank{grid-template-columns:40px 1fr auto}}
+@media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="brand"><div class="logo rgb">EQP</div><div><h1>EQP POLÍCIA</h1><p>Controle de denúncias por guarnição</p></div></div>
+ <div class="pill" id="pill"><i></i><span id="pillTxt">Conectando…</span></div>
+</header>
+<nav class="tabs" id="tabs">
+ <button class="on" data-tab="denuncias">Denúncias</button><button data-tab="ranking">Ranking</button><button data-tab="quinzenas">Quinzenas</button><button data-tab="gerenciar">Gerenciar</button>
+</nav>
+<div class="banner" id="banner" hidden><span id="bannerTxt"></span><button class="btn sm" id="btnRetry" type="button">Tentar novamente</button></div>
+<main>
+ <section class="panel" id="tab-denuncias">
+  <form class="card rgb" id="form" novalidate>
+   <h2>Nova denúncia</h2>
+   <div class="grid">
+    <label>Guarnição<select id="fG"></select></label>
+    <label>Data da denúncia<input type="date" id="fD"></label>
+    <label>Responsável pelo registro<input id="fR" maxlength="80" placeholder="Nome do responsável" autocomplete="off"></label>
+   </div>
+   <p class="err" id="fErr" role="alert"></p>
+   <button class="btn" id="btnSave" type="submit">Registrar denúncia</button>
+  </form>
+  <div class="card rgb">
+   <h2>Denúncias registradas</h2>
+   <div class="filters">
+    <input id="q" type="search" placeholder="Pesquisar responsável, guarnição ou data…">
+    <select id="qG"></select><select id="qQ"></select>
+    <button class="btn ghost" id="btnClear" type="button">Limpar</button>
+   </div>
+   <div class="meta" id="count"></div>
+   <div class="scroll"><table><thead><tr><th>Data</th><th>Guarnição</th><th>Responsável</th><th>Quinzena</th><th>Registrado em</th><th>Ação</th></tr></thead><tbody id="tbody"></tbody></table></div>
+   <div class="row"><button class="btn ghost" id="btnMore" type="button" hidden>Carregar mais</button></div>
+  </div>
+ </section>
+ <section class="panel" id="tab-ranking" hidden>
+  <div class="card rgb">
+   <h2>Ranking de denúncias por guarnição</h2>
+   <label>Período<select id="rP"></select></label>
+   <div class="stats" style="margin-top:14px"><div class="stat"><small>Denúncias no período</small><b id="rTot">0</b></div><div class="stat"><small>Guarnição líder</small><b id="rLead">—</b></div></div>
+   <div id="rList"></div>
+  </div>
+ </section>
+ <section class="panel" id="tab-quinzenas" hidden>
+  <div class="card rgb"><h2>Histórico de quinzenas</h2><p class="meta">Ciclos de 01 a 15 e de 16 ao último dia de cada mês, a partir de 01/11/2026. Os registros de quinzenas anteriores ficam sempre consultáveis.</p></div>
+  <div class="qgrid" id="qList"></div>
+ </section>
+ <section class="panel" id="tab-gerenciar" hidden>
+  <div class="card rgb">
+   <h2>Gerenciamento</h2>
+   <div class="warn"><b>Atenção:</b> este sistema não usa login nem senha. Qualquer visitante com acesso ao site poderá excluir denúncias.</div>
+   <div class="stats" style="margin-top:14px">
+    <div class="stat"><small>Total de denúncias</small><b id="mTot">0</b></div>
+    <div class="stat"><small>Quinzena atual</small><b id="mCur" style="font-size:1rem">—</b></div>
+    <div class="stat"><small>Próxima quinzena começa em</small><b id="mNext" style="font-size:1rem">—</b></div>
+    <div class="stat"><small>Última sincronização</small><b id="mSync" style="font-size:1rem">—</b></div>
+   </div>
+   <div class="row"><button class="btn" id="btnSync" type="button">Sincronizar agora</button><button class="btn ghost" id="btnCsv" type="button">Exportar CSV (backup)</button></div>
+  </div>
+ </section>
+</main>
+<footer>Le Draus</footer>
+<div class="modal" id="modal" hidden><div class="card rgb box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+ <h2 id="mTitle">Excluir denúncia?</h2><p id="mTxt"></p><p><b>Esta ação é permanente e não pode ser desfeita.</b></p>
+ <div class="row"><button class="btn ghost" id="mNo" type="button">Cancelar</button><button class="btn danger" id="mYes" type="button">Excluir definitivamente</button></div>
+</div></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const BASE = 'https://hybanzmjkdlundrbuerh.supabase.co/rest/v1/denuncias';
+const KEY = 'sb_publishable_OlSbIG5aqSAmv_HMsxs6Ng_b6SnNy4s';
+const G = ['MILITAR', 'CIVIL', 'PRF', 'FEDERAL', 'EXÉRCITO'];
+const COL = { MILITAR: '#1f8bff', CIVIL: '#22d3ff', PRF: '#ffb020', FEDERAL: '#a78bfa', 'EXÉRCITO': '#2ee6a6' };
+const S = { rows: [], loaded: false, busy: false, sync: null, limit: 100, del: null, saving: false, deleting: false };
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, '0');
+const norm = s => String(s == null ? '' : s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+function h(tag, p, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(p || {})) {
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (v != null && v !== false) el.setAttribute(k, v === true ? '' : v);
+  }
+  kids.flat().forEach(c => { if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return el;
+}
+function toast(msg, type) {
+  const t = h('div', { class: 'toast ' + (type || '') }, msg);
+  $('toasts').append(t);
+  setTimeout(() => t.remove(), type === 'error' ? 7000 : 3500);
+}
+function setStatus(kind, txt) {
+  $('pill').className = 'pill ' + kind;
+  $('pillTxt').textContent = txt;
+}
+
+/* ---------- datas e quinzenas ---------- */
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const fmt = iso => { const [y, m, d] = String(iso).slice(0, 10).split('-'); return d + '/' + m + '/' + y; };
+function validISO(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [y, m, d] = s.split('-').map(Number), dt = new Date(y, m - 1, d);
+  return y >= 2000 && y <= 2100 && dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+}
+const qIdx = (y, m, half) => y * 24 + (m - 1) * 2 + (half - 1);
+const FIRST = qIdx(2026, 11, 1);
+const qOf = iso => { const [y, m, d] = String(iso).slice(0, 10).split('-').map(Number); return qIdx(y, m, d <= 15 ? 1 : 2); };
+function qInfo(i) {
+  const y = Math.floor(i / 24), r = i % 24, m = Math.floor(r / 2) + 1, half = r % 2 + 1;
+  const last = new Date(y, m, 0).getDate();
+  const start = y + '-' + pad(m) + '-' + (half === 1 ? '01' : '16');
+  const end = y + '-' + pad(m) + '-' + (half === 1 ? '15' : pad(last));
+  return { i, start, end, label: fmt(start) + ' – ' + fmt(end) };
+}
+function allQ() {
+  const cur = qOf(todayISO()), set = new Set([cur]);
+  for (let i = FIRST; i <= cur; i++) set.add(i);
+  S.rows.forEach(r => set.add(qOf(r.data_denuncia)));
+  return [...set].sort((a, b) => b - a).map(qInfo);
+}
+function count(rows) {
+  const c = {}; G.forEach(g => c[g] = 0);
+  rows.forEach(r => { c[r.guarnicao] = (c[r.guarnicao] || 0) + 1; });
+  return c;
+}
+const byDay = (a, b) => b.data_denuncia.localeCompare(a.data_denuncia) || String(b.created_at).localeCompare(String(a.created_at)) || (b.id > a.id ? 1 : -1);
+
+/* ---------- Supabase (REST) ---------- */
+async function api(qs, o) {
+  o = o || {};
+  let r;
+  try {
+    r = await fetch(BASE + (qs || ''), {
+      method: o.method || 'GET',
+      headers: Object.assign({ apikey: KEY, 'Content-Type': 'application/json' }, o.headers || {}),
+      body: o.body ? JSON.stringify(o.body) : undefined
+    });
+  } catch (e) { throw new Error('Sem conexão com o Supabase. Verifique a internet e tente novamente.'); }
+  const t = await r.text();
+  let d = null; try { d = t ? JSON.parse(t) : null; } catch (e) { /* resposta sem JSON */ }
+  if (!r.ok) {
+    const c = (d && d.code) || '', m = (d && d.message) || '';
+    let msg;
+    if (r.status === 401) msg = 'O Supabase recusou a chave pública. Confira a chave configurada.';
+    else if (r.status === 403 || c === '42501') msg = 'Acesso negado pelo Supabase (RLS). Execute o arquivo supabase.sql no SQL Editor.';
+    else if (r.status === 404 || c === 'PGRST205' || c === '42P01') msg = 'Tabela public.denuncias não encontrada. Execute o arquivo supabase.sql no SQL Editor.';
+    else if (c === '23514') msg = 'O banco rejeitou os dados (guarnição ou responsável inválido).';
+    else msg = 'Erro do Supabase (' + r.status + ')' + (m ? ': ' + m : '');
+    throw new Error(msg);
+  }
+  return d;
+}
+async function fetchAll() {
+  const out = [];
+  for (let off = 0; off < 100000; off += 1000) {
+    const page = await api('?select=id,guarnicao,data_denuncia,registrado_por,created_at&order=data_denuncia.desc,created_at.desc&limit=1000&offset=' + off);
+    out.push(...page);
+    if (page.length < 1000) break;
+  }
+  return out;
+}
+async function refresh(silent) {
+  if (S.busy) return;
+  S.busy = true;
+  if (!silent) setStatus('', 'Sincronizando…');
+  try {
+    S.rows = (await fetchAll()).sort(byDay);
+    S.loaded = true; S.sync = new Date();
+    $('banner').hidden = true;
+    setStatus('ok', 'Conectado ao Supabase');
+    if (!silent) toast('Dados sincronizados.', 'ok');
+  } catch (e) {
+    setStatus('bad', 'Falha na conexão');
+    $('bannerTxt').textContent = e.message; $('banner').hidden = false;
+    if (!silent) toast(e.message, 'error');
+  } finally { S.busy = false; renderAll(); }
+}
+
+/* ---------- selects ---------- */
+function fill(sel, opts, keep) {
+  const sig = opts.map(o => o[0] + '|' + o[1]).join(';');
+  if (sel.dataset.sig !== sig) {
+    const v = keep != null ? keep : sel.value;
+    sel.replaceChildren(...opts.map(o => h('option', { value: o[0] }, o[1])));
+    sel.dataset.sig = sig; sel.value = v;
+    if (sel.value !== v) sel.selectedIndex = 0;
+  }
+}
+function fillSelects() {
+  const qs = allQ(), cur = qOf(todayISO());
+  fill($('qQ'), [['', 'Todas as quinzenas']].concat(qs.map(q => [String(q.i), q.label + (q.i === cur ? ' (atual)' : '')])));
+  fill($('rP'), [['current', 'Quinzena atual (' + qInfo(cur).label + ')'], ['all', 'Todas as quinzenas']].concat(qs.filter(q => q.i !== cur).map(q => [String(q.i), q.label])));
+}
+
+/* ---------- renderização ---------- */
+function filtered() {
+  const q = norm($('q').value.trim()), g = $('qG').value, qq = $('qQ').value;
+  return S.rows.filter(r => {
+    if (g && r.guarnicao !== g) return false;
+    if (qq && String(qOf(r.data_denuncia)) !== qq) return false;
+    return !q || norm(r.guarnicao + ' ' + r.registrado_por + ' ' + fmt(r.data_denuncia) + ' ' + r.data_denuncia).includes(q);
+  });
+}
+function renderTable() {
+  const list = filtered(), tb = $('tbody');
+  if (!S.loaded) { tb.replaceChildren(h('tr', null, h('td', { class: 'empty', colspan: 6 }, $('banner').hidden ? 'Carregando denúncias…' : 'Não foi possível carregar as denúncias.'))); $('count').textContent = ''; $('btnMore').hidden = true; return; }
+  if (!list.length) tb.replaceChildren(h('tr', null, h('td', { class: 'empty', colspan: 6 }, S.rows.length ? 'Nenhuma denúncia encontrada com esses filtros.' : 'Nenhuma denúncia registrada ainda.')));
+  else tb.replaceChildren(...list.slice(0, S.limit).map(r => h('tr', null,
+    h('td', null, fmt(r.data_denuncia)),
+    h('td', null, h('span', { class: 'tag', style: '--c:' + (COL[r.guarnicao] || '#8da2c4') }, r.guarnicao)),
+    h('td', null, r.registrado_por),
+    h('td', null, qInfo(qOf(r.data_denuncia)).label),
+    h('td', null, r.created_at ? new Date(r.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '—'),
+    h('td', null, h('button', { class: 'btn danger sm', type: 'button', onclick: () => askDelete(r) }, 'Excluir')))));
+  $('count').textContent = 'Mostrando ' + Math.min(list.length, S.limit) + ' de ' + list.length + ' (total geral: ' + S.rows.length + ')';
+  $('btnMore').hidden = list.length <= S.limit;
+}
+function renderRanking() {
+  const cur = qOf(todayISO()), p = $('rP').value || 'current';
+  const rows = p === 'all' ? S.rows : S.rows.filter(r => qOf(r.data_denuncia) === (p === 'current' ? cur : Number(p)));
+  const c = count(rows);
+  const list = Object.keys(c).sort((a, b) => c[b] - c[a] || (G.indexOf(a) + 1 || 99) - (G.indexOf(b) + 1 || 99));
+  const max = Math.max(1, c[list[0]] || 0), top = list.filter(g => c[g] === c[list[0]]);
+  $('rTot').textContent = rows.length;
+  $('rLead').textContent = rows.length ? top.join(' / ') : '—';
+  $('rList').replaceChildren(...list.map((g, i) => h('div', { class: 'rank', style: 'animation-delay:' + i * 60 + 'ms' },
+    h('div', { class: 'pos' }, i + 1 + 'º'),
+    h('div', null, h('b', null, g), h('div', { class: 'bar' }, h('i', { style: 'width:' + (c[g] / max * 100) + '%' }))),
+    h('div', { class: 'num' }, c[g]))));
+}
+function renderQuinzenas() {
+  const cur = qOf(todayISO());
+  $('qList').replaceChildren(...allQ().map(q => {
+    const rows = S.rows.filter(r => qOf(r.data_denuncia) === q.i), c = count(rows);
+    return h('div', { class: 'card rgb' },
+      h('h2', null, q.label, q.i === cur ? h('span', { class: 'cur' }, 'ATUAL') : null),
+      h('div', null, h('b', { class: 'num' }, rows.length), ' denúncia(s)'),
+      h('div', { class: 'chips' }, Object.keys(c).map(g => h('span', { class: 'tag', style: '--c:' + (COL[g] || '#8da2c4') }, g + ': ' + c[g]))),
+      h('div', { class: 'row' },
+        h('button', { class: 'btn sm', type: 'button', onclick: () => { $('qQ').value = String(q.i); S.limit = 100; showTab('denuncias'); renderTable(); } }, 'Ver denúncias'),
+        h('button', { class: 'btn ghost sm', type: 'button', onclick: () => { $('rP').value = q.i === cur ? 'current' : String(q.i); showTab('ranking'); renderRanking(); } }, 'Ver ranking')));
+  }));
+}
+function renderManage() {
+  const cur = qOf(todayISO());
+  $('mTot').textContent = S.rows.length;
+  $('mCur').textContent = qInfo(cur).label;
+  $('mNext').textContent = fmt(qInfo(cur + 1).start);
+  $('mSync').textContent = S.sync ? S.sync.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'medium' }) : '—';
+}
+function renderAll() { fillSelects(); renderTable(); renderRanking(); renderQuinzenas(); renderManage(); }
+function showTab(name) {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('main > section').forEach(s => { s.hidden = s.id !== 'tab-' + name; });
+}
+
+/* ---------- ações ---------- */
+async function onSubmit(e) {
+  e.preventDefault();
+  if (S.saving) return;
+  const g = $('fG').value, d = $('fD').value, r = $('fR').value.trim().replace(/\s+/g, ' '), err = $('fErr');
+  err.textContent = '';
+  if (!G.includes(g)) { err.textContent = 'Selecione a guarnição.'; $('fG').focus(); return; }
+  if (!validISO(d)) { err.textContent = 'Informe uma data válida.'; $('fD').focus(); return; }
+  if (!r) { err.textContent = 'Informe o responsável pelo registro.'; $('fR').focus(); return; }
+  S.saving = true; $('btnSave').disabled = true; $('btnSave').textContent = 'Salvando…';
+  try {
+    const res = await api('', { method: 'POST', headers: { Prefer: 'return=representation' }, body: { guarnicao: g, data_denuncia: d, registrado_por: r } });
+    const row = Array.isArray(res) ? res[0] : res;
+    if (!row) throw new Error('O Supabase não confirmou o registro. Use "Sincronizar agora" para conferir.');
+    S.rows.push(row); S.rows.sort(byDay);
+    $('fR').value = ''; $('fG').value = '';
+    renderAll();
+    toast('Denúncia registrada com sucesso.', 'ok');
+  } catch (ex) { err.textContent = ex.message; toast(ex.message, 'error'); }
+  finally { S.saving = false; $('btnSave').disabled = false; $('btnSave').textContent = 'Registrar denúncia'; }
+}
+function askDelete(row) {
+  S.del = row;
+  $('mTxt').textContent = 'Denúncia de ' + fmt(row.data_denuncia) + ' — ' + row.guarnicao + ' — registrada por ' + row.registrado_por + '.';
+  $('modal').hidden = false; $('mNo').focus();
+}
+function closeModal() { if (S.deleting) return; $('modal').hidden = true; S.del = null; }
+async function doDelete() {
+  const row = S.del;
+  if (!row || S.deleting) return;
+  S.deleting = true; $('mYes').disabled = true; $('mYes').textContent = 'Excluindo…';
+  try {
+    const res = await api('?id=eq.' + encodeURIComponent(row.id), { method: 'DELETE', headers: { Prefer: 'return=representation' } });
+    if (!Array.isArray(res) || !res.length) throw new Error('Nada foi excluído: o registro já não existe ou o Supabase bloqueou a exclusão (RLS). Sincronizando…');
+    S.rows = S.rows.filter(r => r.id !== row.id);
+    renderAll(); toast('Denúncia excluída.', 'ok');
+  } catch (ex) { toast(ex.message, 'error'); refresh(true); }
+  finally { S.deleting = false; $('mYes').disabled = false; $('mYes').textContent = 'Excluir definitivamente'; $('modal').hidden = true; S.del = null; }
+}
+function exportCsv() {
+  if (!S.rows.length) { toast('Não há denúncias para exportar.', 'error'); return; }
+  const cell = v => { v = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+  const csv = ['id,guarnicao,data_denuncia,registrado_por,created_at'].concat(S.rows.map(r => [r.id, r.guarnicao, r.data_denuncia, r.registrado_por, r.created_at].map(cell).join(','))).join('\r\n');
+  const a = h('a', { href: URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })), download: 'denuncias-' + todayISO() + '.csv' });
+  document.body.append(a); a.click(); a.remove();
+  toast('CSV exportado.', 'ok');
+}
+
+/* ---------- inicialização ---------- */
+function init() {
+  fill($('fG'), [['', 'Selecione…']].concat(G.map(g => [g, g])));
+  fill($('qG'), [['', 'Todas as guarnições']].concat(G.map(g => [g, g])));
+  $('fD').value = todayISO();
+  document.querySelectorAll('#tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  $('form').addEventListener('submit', onSubmit);
+  $('q').addEventListener('input', () => { S.limit = 100; renderTable(); });
+  $('qG').addEventListener('change', () => { S.limit = 100; renderTable(); });
+  $('qQ').addEventListener('change', () => { S.limit = 100; renderTable(); });
+  $('btnClear').addEventListener('click', () => { $('q').value = ''; $('qG').value = ''; $('qQ').value = ''; S.limit = 100; renderTable(); });
+  $('btnMore').addEventListener('click', () => { S.limit += 100; renderTable(); });
+  $('rP').addEventListener('change', renderRanking);
+  $('btnRetry').addEventListener('click', () => refresh(false));
+  $('btnSync').addEventListener('click', () => refresh(false));
+  $('btnCsv').addEventListener('click', exportCsv);
+  $('mNo').addEventListener('click', closeModal);
+  $('mYes').addEventListener('click', doDelete);
+  $('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) closeModal(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(true); });
+  setInterval(() => { if (!document.hidden && !S.saving && !S.deleting) refresh(true); }, 30000);
+  renderAll();
+  refresh(true);
+}
+init();
+})();
+</script>
+</body>
+</html>
